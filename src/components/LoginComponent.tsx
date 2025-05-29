@@ -1,10 +1,9 @@
-
-
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react"
+import logo from "@/images/logo.png" 
 
 export const LoginComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -24,8 +23,8 @@ export const LoginComponent = () => {
 
   const cleanForm = () => {
     setFormData({
-        email: "",
-        password: ""
+      email: "",
+      password: ""
     })
   }
 
@@ -42,10 +41,15 @@ export const LoginComponent = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Bienvenido a Latelier</h1>
+    <div className="flex justify-center items-center min-h-screen bg-black">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg shadow-[#B8860B]/30 animate-fade-in">
+        <div className="flex flex-col items-center text-center">
+          <img
+            src={logo}
+            alt="Logo de Latelier"
+            className="w-20 h-20 rounded-full shadow-md mb-4 object-cover"
+          />
+          <h1 className="text-3xl font-bold text-gray-900 font-serif">Bienvenido a Latelier</h1>
           <p className="mt-2 text-sm text-gray-600">Ingresa tus credenciales para continuar</p>
         </div>
 
@@ -96,30 +100,10 @@ export const LoginComponent = () => {
             </div>
           </div>
 
-          {/* <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Recordarme
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <Link to="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-          </div> */}
-
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex cursor-pointer justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-950 hover:scale-105 transition-all duration-300"
+            className="w-full flex justify-center py-2 px-4 rounded-md text-sm font-medium text-white bg-gradient-to-r from-[#B8860B] to-[#A87408] hover:brightness-110 transition-all duration-300"
           >
             {isLoading ? (
               <>
@@ -133,7 +117,7 @@ export const LoginComponent = () => {
 
           <p className="text-center text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
-            <Link to="/register" className="font-medium text-blue-950 hover:text-blue-800">
+            <Link to="/register" className="font-medium text-[#B8860B] hover:text-[#A87408] transition-colors duration-200">
               Regístrate
             </Link>
           </p>
