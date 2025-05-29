@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss"
 
 const config: Config = {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx}", // ajustalo si tenés otra estructura
+    "./src/**/*.{js,ts,jsx,tsx}", 
   ],
   theme: {
     extend: {
@@ -16,7 +16,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ['"Playfair Display"', 'serif'], // si usás una fuente elegante
+        serif: ['"Playfair Display"', 'serif'],
       }
     },
   },
