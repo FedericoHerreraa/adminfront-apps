@@ -1,9 +1,9 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react"
-import logo from "@/images/logo.png" 
+import logo from "@/images/logo.png"
 
 export const LoginComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,6 +12,8 @@ export const LoginComponent = () => {
     email: "",
     password: ""
   })
+
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -32,12 +34,35 @@ export const LoginComponent = () => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Hacer llamada al context aca
+    try {
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
 
-    setTimeout(() => {
-      setIsLoading(false)
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error al iniciar sesión")
+      }
+
+      // Guardar token o lo que sea necesario
+      localStorage.setItem("token", data.token)
+
       cleanForm()
-    }, 1000)
+      navigate("/dashboard")
+       } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message || "Error desconocido")
+      } else {
+        alert("Error desconocido")
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -1,9 +1,9 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
-import logo from "@/images/logo.png" // ✅ Import correcto
+import logo from "@/images/logo.png"
 
 export const RegisterComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,6 +12,8 @@ export const RegisterComponent = () => {
     name: "",
     password: ""
   })
+
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -33,21 +35,41 @@ export const RegisterComponent = () => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Hacer llamada al context aca
+    try {
+      const response = await fetch("/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
 
-    setTimeout(() => {
-      setIsLoading(false)
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error al registrarse")
+      }
+
       cleanForm()
-    }, 1000)
+      alert("Usuario registrado correctamente 🎉")
+      navigate("/login")
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message || "Error desconocido")
+      } else {
+        alert("Error desconocido")
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-black">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg shadow-[#B8860B]/30 animate-fade-in">
-        
         <div className="flex flex-col items-center text-center">
           <img
-            src={logo} // ✅ Usar variable importada
+            src={logo}
             alt="Logo de Latelier"
             className="w-20 h-20 rounded-full shadow-md mb-4 object-cover"
           />
@@ -120,10 +142,7 @@ export const RegisterComponent = () => {
 
           <p className="text-center text-sm text-gray-600">
             ¿Ya tienes una cuenta?{" "}
-            <Link
-              to="/login"
-              className="font-medium text-[#B8860B] hover:text-[#A87408] transition-colors duration-200"
-            >
+            <Link to="/login" className="font-medium text-[#B8860B] hover:text-[#A87408] transition-colors duration-200">
               Iniciar sesión
             </Link>
           </p>
