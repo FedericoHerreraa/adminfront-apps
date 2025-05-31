@@ -47,10 +47,10 @@ const DeleteDish = () => {
 
       // Actualizar lista local
       setDishes(prev => prev.filter(d => d._id !== id))
-      alert("Plato eliminado correctamente ✅")
+      alert("Plato eliminado correctamente ")
     } catch (err) {
       console.error(err)
-      alert("Error al eliminar el plato ❌")
+      alert("Error al eliminar el plato ")
     }
   }
 
@@ -58,7 +58,7 @@ const DeleteDish = () => {
     <div className="min-h-screen bg-black text-white px-4 py-6">
       <div className="max-w-screen-md mx-auto space-y-6">
         <h2 className="text-3xl font-bold text-center font-serif">
-          🗑️ Eliminar Platos
+          Eliminar Platos
         </h2>
 
         <ul className="space-y-4">

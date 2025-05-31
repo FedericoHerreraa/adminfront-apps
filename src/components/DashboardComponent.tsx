@@ -15,7 +15,7 @@ const DashboardComponent = () => {
 
   return (
     <div className="min-h-screen bg-black px-6 pt-6 relative">
-      {/* 🔓 Botón fijo arriba a la derecha */}
+      
       <div className="absolute top-4 right-6 z-10">
         <button
           onClick={handleLogout}
@@ -25,7 +25,7 @@ const DashboardComponent = () => {
         </button>
       </div>
 
-      {/* 📦 Panel más abajo */}
+      
       <div className="flex flex-col items-center justify-start pt-72">
         <div className="bg-white rounded-xl p-8 shadow-lg shadow-[#B8860B]/30 w-full max-w-2xl animate-fade-in">
           <h1 className="text-3xl font-bold text-center text-gray-800 font-serif mb-6">

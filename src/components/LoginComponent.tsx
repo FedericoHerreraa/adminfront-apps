@@ -49,7 +49,7 @@ export const LoginComponent = () => {
         throw new Error(data.message || "Error al iniciar sesión")
       }
 
-      // Guardar token o lo que sea necesario
+      
       localStorage.setItem("token", data.token)
 
       cleanForm()
