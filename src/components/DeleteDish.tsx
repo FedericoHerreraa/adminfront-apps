@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 type Dish = {
   _id: string
@@ -47,10 +48,10 @@ const DeleteDish = () => {
 
       // Actualizar lista local
       setDishes(prev => prev.filter(d => d._id !== id))
-      alert("Plato eliminado correctamente ")
+      toast.success("Plato eliminado correctamente ")
     } catch (err) {
       console.error(err)
-      alert("Error al eliminar el plato ")
+      toast.error("Error al eliminar el plato ")
     }
   }
 

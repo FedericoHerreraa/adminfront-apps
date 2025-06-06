@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 const CreateDish = () => {
   const [form, setForm] = useState({
@@ -36,11 +37,11 @@ const CreateDish = () => {
 
       if (!response.ok) throw new Error("Error al crear el plato")
 
-      alert("Plato creado con éxito!")
+      toast.success("Plato creado con éxito!")
       navigate("/dishes/list")
     } catch (error) {
       console.error("Error al crear plato:", error)
-      alert("Hubo un error al crear el plato")
+      toast.error("Hubo un error al crear el plato")
     }
   }
 

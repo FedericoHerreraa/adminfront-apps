@@ -8,56 +8,64 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import DishesList from "./components/DishesList"
 import DeleteDish from "./components/DeleteDish"
 import CreateDish from "./components/CreateDish"
+import HomeRedirect from "./pages/HomeRedirect"
+import { Toaster } from "sonner"
+import { AuthProvider } from "./context/AuthContext"
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/dashboard"
-          element={
+    <AuthProvider>
+      <BrowserRouter>
+        <Toaster />
+        <Routes>
+          <Route path="/" element={<HomeRedirect />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardComponent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dishes"
+            element={
+              <ProtectedRoute>
+                <DishPanel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dishes/list"
+            element={
+              <ProtectedRoute>
+                <DishesList />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/dishes/delete" element={
             <ProtectedRoute>
-              <DashboardComponent />
+              <DeleteDish />
             </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dishes"
-          element={
+          } />
+          <Route path="/dishes/create" element={
             <ProtectedRoute>
-              <DishPanel />
+              <CreateDish />
             </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dishes/list"
-          element={
-            <ProtectedRoute>
-              <DishesList />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/dishes/delete" element={
-          <ProtectedRoute>
-            <DeleteDish />
-          </ProtectedRoute>
-        } />
-        <Route path="/dishes/create" element={
-          <ProtectedRoute>
-            <CreateDish />
-          </ProtectedRoute>
-        } />
-        <Route
-          path="/users"
-          element={
-            <ProtectedRoute>
-              <UserPanel />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+          } />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <UserPanel />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

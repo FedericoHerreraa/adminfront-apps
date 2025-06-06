@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/AuthContext"
 
 const DashboardComponent = () => {
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   const sections = [
     { label: "Administración de Platos", path: "/dishes" },
@@ -9,7 +11,7 @@ const DashboardComponent = () => {
   ]
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
+    logout()
     navigate("/login")
   }
 
@@ -28,7 +30,10 @@ const DashboardComponent = () => {
       
       <div className="flex flex-col items-center justify-start pt-72">
         <div className="bg-white rounded-xl p-8 shadow-lg shadow-[#B8860B]/30 w-full max-w-2xl animate-fade-in">
-          <h1 className="text-3xl font-bold text-center text-gray-800 font-serif mb-6">
+          <p className="text-sm text-gray-500 font-serif">
+            Bienvenido, {user?.name}
+          </p>
+          <h1 className="text-3xl font-bold  text-gray-800 font-serif mb-6">
             Panel de Control
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

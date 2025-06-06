@@ -2,11 +2,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react"
 import logo from "@/images/logo.png"
+import { useAuth } from "@/context/AuthContext"
 
 export const RegisterComponent = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const { register, isLoading } = useAuth()
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -33,34 +35,13 @@ export const RegisterComponent = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
 
     try {
-      const response = await fetch("http://localhost:3000/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || "Error al registrarse")
-      }
-
+      await register(formData)
       cleanForm()
-      alert("Usuario registrado correctamente 🎉")
       navigate("/login")
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        alert(err.message || "Error desconocido")
-      } else {
-        alert("Error desconocido")
-      }
-    } finally {
-      setIsLoading(false)
+    } catch (error) {
+      console.error("Register failed:", error)
     }
   }
 
@@ -86,6 +67,7 @@ export const RegisterComponent = () => {
               <Input
                 type="text"
                 id="name"
+                required
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -101,6 +83,7 @@ export const RegisterComponent = () => {
               <Input
                 type="email"
                 id="email"
+                required
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -113,22 +96,37 @@ export const RegisterComponent = () => {
               <Label htmlFor="password" className="text-sm font-medium text-gray-700">
                 Contraseña
               </Label>
-              <Input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  required
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  disabled={isLoading}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeOffIcon className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center py-2 px-4 rounded-md text-sm font-medium text-white bg-gradient-to-r from-[#B8860B] to-[#A87408] hover:brightness-110 transition-all duration-300"
+            className="w-full cursor-pointer flex justify-center py-2 px-4 rounded-md text-sm font-medium text-white bg-gradient-to-r from-[#B8860B] to-[#A87408] hover:brightness-110 transition-all duration-300"
           >
             {isLoading ? (
               <>
