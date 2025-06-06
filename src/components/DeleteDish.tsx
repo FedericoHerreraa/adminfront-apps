@@ -12,7 +12,7 @@ const DeleteDish = () => {
   const fetchDishes = async () => {
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("/api/dishes", {
+      const response = await fetch("http://localhost:3000/api/dishes", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -34,7 +34,7 @@ const DeleteDish = () => {
 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch(`/api/dishes/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/dishes/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`

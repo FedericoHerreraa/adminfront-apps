@@ -20,7 +20,7 @@ const CreateDish = () => {
 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("/api/dishes", {
+      const response = await fetch("http://localhost:3000/api/dishes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
