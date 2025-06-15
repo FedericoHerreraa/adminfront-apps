@@ -9,6 +9,8 @@ type Dish = {
   category: string
 }
 
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+
 const DishesList = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
   const [filtered, setFiltered] = useState<Dish[]>([])
@@ -20,7 +22,7 @@ const DishesList = () => {
     const fetchDishes = async () => {
       try {
         const token = localStorage.getItem("token")
-        const response = await fetch("http://localhost:3000/api/dishes", {
+        const response = await fetch(`${API_URL}/api/dishes`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

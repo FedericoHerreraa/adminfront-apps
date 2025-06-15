@@ -7,13 +7,15 @@ type Dish = {
   category: string
 }
 
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+
 const DeleteDish = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
 
   const fetchDishes = async () => {
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:3000/api/dishes", {
+      const response = await fetch(`${API_URL}/api/dishes`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -35,7 +37,7 @@ const DeleteDish = () => {
 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch(`http://localhost:3000/api/dishes/${id}`, {
+      const response = await fetch(`${API_URL}/api/dishes/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`

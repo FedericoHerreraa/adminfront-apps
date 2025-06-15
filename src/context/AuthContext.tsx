@@ -17,6 +17,8 @@ type User = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -25,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true)
 
         try {
-            const response = await fetch("http://localhost:3000/api/users/login", {
+            const response = await fetch(`${API_URL}/api/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -69,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true)
 
         try {
-            const response = await fetch("http://localhost:3000/api/users/register", {
+            const response = await fetch(`${API_URL}/api/users/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
