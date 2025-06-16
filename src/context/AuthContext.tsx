@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 type AuthContextType = {
@@ -22,6 +22,23 @@ const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = localStorage.getItem("token")
+            if (token) {
+                const response = await fetch(`${API_URL}/api/users/profile`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+
+                const data = await response.json()
+                setUser({ name: data.name, email: data.email })
+            }
+        }
+        checkAuth()
+    }, [])
 
     const login = async (formData: { email: string, password: string }) => {
         setIsLoading(true)

@@ -13,6 +13,10 @@ import HomeRedirect from "./pages/HomeRedirect"
 import EditDish from "./components/EditDish"
 import { Toaster } from "sonner"
 import { AuthProvider } from "./context/AuthContext"
+import UserList from "./components/UserList"
+import CreateUser from "./components/CreateUser"
+import UpdateUser from "./components/UpdateUser"
+import DeleteUser from "./components/DeleteUser"
 
 
 
@@ -74,6 +78,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <UserPanel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/list"
+            element={
+              <ProtectedRoute>
+                <UserList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/create"
+            element={
+              <ProtectedRoute>
+                <CreateUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/edit "
+            element={
+              <ProtectedRoute>
+                <UpdateUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/delete"
+            element={
+              <ProtectedRoute>
+                <DeleteUser />
               </ProtectedRoute>
             }
           />

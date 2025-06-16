@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { LogoutComponent } from "./LogoutComponent"
+import { BackButton } from "./BackButton"
 
 type Dish = {
   _id: string
@@ -9,14 +10,20 @@ type Dish = {
   category: string
 }
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
 const DishesList = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
   const [filtered, setFiltered] = useState<Dish[]>([])
-  const [category, setCategory] = useState<string>("")
-
-  const navigate = useNavigate()
+  const [category, setCategory] = useState("")
 
   useEffect(() => {
     const fetchDishes = async () => {
@@ -39,57 +46,42 @@ const DishesList = () => {
     fetchDishes()
   }, [])
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value
-    setCategory(selected)
+  const handleCategoryChange = (value: string) => {
+    setCategory(value)
 
-    if (selected === "") {
+    if (value === "") {
       setFiltered(dishes)
     } else {
-      const filteredList = dishes.filter((d) => d.category === selected)
+      const filteredList = dishes.filter((d) => d.category === value)
       setFiltered(filteredList)
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    navigate("/login")
-  }
 
   return (
     <div className="min-h-screen bg-black text-white px-4 py-6 relative">
-      {/* Botón fijo arriba a la derecha */}
-      <div className="absolute top-4 right-4 z-10">
-        <button
-          onClick={handleLogout}
-          className="py-2 px-4 text-sm font-semibold text-white rounded-md bg-gradient-to-r from-[#B8860B] to-[#A87408] hover:brightness-110 transition-all"
-        >
-          Cerrar sesión
-        </button>
-      </div>
+      <LogoutComponent />
+      <BackButton />
 
       <div className="max-w-screen-md mx-auto w-full mt-12 space-y-6">
-        {/* Título */}
         <h2 className="text-3xl font-bold text-center font-serif">
            Platos Disponibles
         </h2>
 
-        {/* Filtro */}
         <div className="w-full max-w-xs mx-auto">
-          <select
-            value={category}
-            onChange={handleCategoryChange}
-            className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600"
-          >
-            <option value="">Todas las categorías</option>
-            <option value="entrada">Entrada</option>
-            <option value="principal">Principal</option>
-            <option value="postre">Postre</option>
-            <option value="bebida">Bebida</option>
-          </select>
+          <Select value={category} onValueChange={handleCategoryChange}>
+            <SelectTrigger className="w-full bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
+              <SelectValue placeholder="Todas las categorías" />
+            </SelectTrigger>
+            <SelectContent className="bg-gray-800 border-gray-700">
+              <SelectItem value="entrada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Entrada</SelectItem>
+              <SelectItem value="principal" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Principal</SelectItem>
+              <SelectItem value="postre" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Postre</SelectItem>
+              <SelectItem value="bebida" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Lista de platos */}
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {filtered.map((dish) => (
             <li
