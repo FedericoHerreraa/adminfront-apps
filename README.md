@@ -21,23 +21,14 @@ Frontend para la administración de platos y usuarios de Latelier, construido co
    ```
    VITE_REACT_APP_API_URL=http://localhost:3000
    ```
-   (Reemplaza la URL por la de tu backend si es necesario)
+  VITE_REACT_APP_API_URL=http://localhost:3000
 4. Inicia la aplicación:
    ```bash
    npm run dev
    ```
    La app estará disponible en [http://localhost:5173](http://localhost:5173) por defecto.
 
----
 
-## 2. Datos del admin inicial
-
-- **Email:** admin@latelier.com
-- **Contraseña:** admin123
-
-*(Estos datos pueden variar según la configuración de tu backend.)*
-
----
 
 ## 3. Dependencias necesarias
 
@@ -54,7 +45,6 @@ Crea un archivo `.env` en la raíz del frontend con:
 ```
 VITE_REACT_APP_API_URL=http://localhost:3000
 ```
-
 ---
 
 ## 5. Estructura del sistema
