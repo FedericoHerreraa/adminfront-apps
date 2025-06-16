@@ -8,9 +8,13 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import DishesList from "./components/DishesList"
 import DeleteDish from "./components/DeleteDish"
 import CreateDish from "./components/CreateDish"
+import ModifyDish from "./components/ModifyDish"
 import HomeRedirect from "./pages/HomeRedirect"
+import EditDish from "./components/EditDish"
 import { Toaster } from "sonner"
 import { AuthProvider } from "./context/AuthContext"
+
+
 
 function App() {
   return (
@@ -45,6 +49,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/dishes/edit/:id" element={
+            <ProtectedRoute>
+              <EditDish />
+            </ProtectedRoute>
+          } />
           <Route path="/dishes/delete" element={
             <ProtectedRoute>
               <DeleteDish />
@@ -55,6 +64,11 @@ function App() {
               <CreateDish />
             </ProtectedRoute>
           } />
+          <Route path="/dishes/edit" element={
+              <ProtectedRoute>
+                <ModifyDish />
+              </ProtectedRoute>
+            } />
           <Route
             path="/users"
             element={
