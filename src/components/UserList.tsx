@@ -21,7 +21,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+
 
 export default function UserList() {
     const [users, setUsers] = useState<User[]>([])
