@@ -98,7 +98,7 @@ function App() {
             }
           />
           <Route
-            path="/users/edit "
+            path="/users/edit/:id"
             element={
               <ProtectedRoute>
                 <UpdateUser />

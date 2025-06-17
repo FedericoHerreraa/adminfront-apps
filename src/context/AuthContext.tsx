@@ -8,9 +8,12 @@ type AuthContextType = {
     logout: () => void
     register: (formData: { email: string, name: string, password: string }) => Promise<void>
     isLoading: boolean
+    fetchUsers: () => Promise<User[]>
 }
 
-type User = {
+export type User = {
+    _id: string,
+    role: string,
     name: string,
     email: string,
 }
@@ -22,7 +25,7 @@ const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-
+    
     useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem("token")
@@ -34,11 +37,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 })
 
                 const data = await response.json()
-                setUser({ name: data.name, email: data.email })
+                console.log(data)
+                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
             }
         }
         checkAuth()
     }, [])
+
+    const fetchUsers = async () => {
+        const token = localStorage.getItem("token")
+        const response = await fetch(`${API_URL}/api/users`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        const data = await response.json()
+        return data
+    }
 
     const login = async (formData: { email: string, password: string }) => {
         setIsLoading(true)
@@ -61,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             localStorage.setItem("token", data.token)
 
             if (data) {
-                setUser({ name: data.name, email: data.email })
+                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
                 console.log(user)
             }
 
@@ -114,7 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    return <AuthContext.Provider value={{ user, setUser, login, logout, register, isLoading }}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{ user, setUser, login, logout, register, isLoading, fetchUsers }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {

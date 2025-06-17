@@ -8,8 +8,8 @@ const UserPanel = () => {
   const options = [
     { label: "Listar Usuarios", path: "/users/list" },
     { label: "Crear Usuario", path: "/users/create" },
-    { label: "Modificar Usuario", path: "/users/edit" },
-    { label: "Eliminar Usuario", path: "/users/delete" }
+    // { label: "Modificar Usuario", path: "/users/edit" },
+    // { label: "Eliminar Usuario", path: "/users/delete" }
   ]
 
   return (
