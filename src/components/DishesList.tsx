@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
 const DishesList = () => {
   const [dishes, setDishes] = useState<Dish[]>([])

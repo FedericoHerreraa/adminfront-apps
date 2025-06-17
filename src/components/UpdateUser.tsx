@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select"
 import { type User } from "@/context/AuthContext"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
 
 const UpdateUser = () => {

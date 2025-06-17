@@ -4,7 +4,7 @@ import { LogoutComponent } from "./LogoutComponent"
 import { BackButton } from "./BackButton"
 import { useAuth, type User } from "@/context/AuthContext"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
 const DeleteUser = () => {
     const [users, setUsers] = useState<User[]>([])
