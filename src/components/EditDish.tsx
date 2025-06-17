@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
 type Dish = {
   name: string
