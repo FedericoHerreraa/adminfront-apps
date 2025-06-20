@@ -46,7 +46,7 @@ const DeleteUser = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
             <LogoutComponent />
-            <BackButton />
+            <BackButton url="/users/list"/>
 
             <div className="max-w-4xl mx-auto">
                 <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">

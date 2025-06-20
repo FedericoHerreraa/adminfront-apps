@@ -80,7 +80,7 @@ export default function UserList() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
             <LogoutComponent />
-            <BackButton />
+            <BackButton url="/users"/>
 
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col items-center gap-8 mb-12">

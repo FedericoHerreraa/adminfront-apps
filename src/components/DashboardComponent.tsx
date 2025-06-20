@@ -12,7 +12,7 @@ const DashboardComponent = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black px-6 pt-6 relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black px-6 pt-6 relative">
       <LogoutComponent />
     
       <div className="flex flex-col items-center justify-start pt-72">

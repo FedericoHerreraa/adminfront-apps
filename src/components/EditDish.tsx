@@ -76,7 +76,7 @@ const EditDish = () => {
   if (loading) return <div className="text-white">Cargando...</div>
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl text-black w-full max-w-md shadow-md space-y-4">
         <h2 className="text-xl font-bold text-center">Editar Plato</h2>
 

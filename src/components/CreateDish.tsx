@@ -48,7 +48,7 @@ const CreateDish = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-6 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
         className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md space-y-4"

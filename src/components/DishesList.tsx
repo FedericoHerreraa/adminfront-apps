@@ -59,9 +59,9 @@ const DishesList = () => {
 
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-6 relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 relative">
       <LogoutComponent />
-      <BackButton />
+      <BackButton url="/dishes"/>
 
       <div className="max-w-screen-md mx-auto w-full mt-12 space-y-6">
         <h2 className="text-3xl font-bold text-center font-serif">

@@ -13,9 +13,9 @@ const UserPanel = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black px-6 pt-6 relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black px-6 pt-6 relative">
       <LogoutComponent />
-      <BackButton />
+      <BackButton url="/dashboard"/>
 
       <div className="flex flex-col items-center justify-start pt-72">
         <div className="bg-zinc-800 rounded-xl p-8 shadow-lg shadow-[#B8860B]/30 w-full max-w-2xl animate-fade-in">
