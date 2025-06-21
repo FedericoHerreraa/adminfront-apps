@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -29,7 +29,7 @@ function AuditLog() {
       .catch((err) => {
         console.error('❌ Error al traer logs:', err.message);
       });
-  }, []);
+  }, [token]);
 
 const renderDetails = (details: Record<string, unknown> | string) => {
   if (typeof details === 'string') return details;
