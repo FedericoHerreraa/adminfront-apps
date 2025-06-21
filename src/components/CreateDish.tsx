@@ -10,7 +10,7 @@ const CreateDish = () => {
     description: "",
     price: "",
     category: "",
-    subcategory: "", // <-- Cambiado aquí
+    subcategory: "", 
     ingredientes: "",
     alergenos: ""
   })
@@ -40,7 +40,7 @@ const CreateDish = () => {
       formData.append("price", form.price)
       formData.append("category", form.category)
       if (form.category === "principal") {
-        formData.append("subcategory", form.subcategory) // <-- Cambiado aquí
+        formData.append("subcategory", form.subcategory) 
       }
       formData.append("ingredientes", form.ingredientes)
       formData.append("alergenos", form.alergenos)
@@ -119,8 +119,8 @@ const CreateDish = () => {
 
         {form.category === "principal" && (
           <select
-            name="subcategory" // <-- Cambiado aquí
-            value={form.subcategory} // <-- Cambiado aquí
+            name="subcategory"
+            value={form.subcategory} 
             onChange={handleChange}
             className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
             required

@@ -10,7 +10,7 @@ type Dish = {
   description: string
   price: string
   category: string
-  subcategory?: string // <-- minúsculas
+  subcategory?: string 
   ingredientes: string
   alergenos: string
   image?: string
@@ -23,7 +23,7 @@ const EditDish = () => {
     description: "",
     price: "",
     category: "",
-    subcategory: "", // <-- minúsculas
+    subcategory: "", 
     ingredientes: "",
     alergenos: "",
     image: ""
@@ -63,7 +63,7 @@ const EditDish = () => {
       formData.append("description", dish.description.trim())
       formData.append("price", dish.price)
       formData.append("category", dish.category)
-      formData.append("subcategory", dish.subcategory || "") // <-- minúsculas
+      formData.append("subcategory", dish.subcategory || "") 
       formData.append("ingredientes", dish.ingredientes)
       formData.append("alergenos", dish.alergenos)
       if (imageFile) formData.append("image", imageFile)
