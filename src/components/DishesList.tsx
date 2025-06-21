@@ -1,6 +1,24 @@
 import { useEffect, useState } from "react"
 import { LogoutComponent } from "./LogoutComponent"
 import { BackButton } from "./BackButton"
+import { Pencil, Trash2 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 type Dish = {
   _id: string
@@ -13,20 +31,13 @@ type Dish = {
   alergenos?: string
 }
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
 const DishesList = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
   const [filtered, setFiltered] = useState<Dish[]>([])
   const [category, setCategory] = useState("")
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchDishes = async () => {
@@ -52,7 +63,7 @@ const DishesList = () => {
   const handleCategoryChange = (value: string) => {
     setCategory(value)
 
-    if (value === "") {
+    if (value === "todas") {
       setFiltered(dishes)
     } else {
       const filteredList = dishes.filter((d) => d.category === value)
@@ -60,58 +71,126 @@ const DishesList = () => {
     }
   }
 
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm("¿Estás seguro de que quieres eliminar este plato?")
+    if (!confirmDelete) return
+
+    try {
+      const token = localStorage.getItem("token")
+      const response = await fetch(`${API_URL}/api/dishes/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el plato")
+      }
+
+      setDishes(prev => prev.filter(d => d._id !== id))
+      setFiltered(prev => prev.filter(d => d._id !== id))
+      toast.success("Plato eliminado correctamente")
+    } catch (err) {
+      console.error(err)
+      toast.error("Error al eliminar el plato")
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
       <LogoutComponent />
       <BackButton url="/dishes" />
 
-      <div className="max-w-screen-md mx-auto w-full mt-12 space-y-6">
-        <h2 className="text-3xl font-bold text-center font-serif">
-          Platos Disponibles
-        </h2>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col items-center gap-8 mb-12">
+          <h1 className="text-4xl font-bold text-white mb-2">Platos</h1>
+          <p className="text-gray-400 text-lg">Administra los platos del restaurante</p>
+        </div>
 
-        <div className="w-full max-w-xs mx-auto">
+        <div className="w-full mb-5 flex justify-between">
           <Select value={category} onValueChange={handleCategoryChange}>
-            <SelectTrigger className="w-full bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
+            <SelectTrigger className="w-full max-w-xs bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
               <SelectValue placeholder="Todas las categorías" />
             </SelectTrigger>
             <SelectContent className="bg-gray-800 border-gray-700">
-              <SelectItem value="entrada">Entrada</SelectItem>
-              <SelectItem value="principal">Principal</SelectItem>
-              <SelectItem value="postre">Postre</SelectItem>
-              <SelectItem value="bebida">Bebida</SelectItem>
+              <SelectItem value="todas" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Todas las categorías</SelectItem>
+              <SelectItem value="entrada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Entrada</SelectItem>
+              <SelectItem value="principal" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Principal</SelectItem>
+              <SelectItem value="postre" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Postre</SelectItem>
+              <SelectItem value="bebida" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida</SelectItem>
             </SelectContent>
           </Select>
+
+          <button
+            onClick={() => navigate("/dishes/create")}
+            className="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+          >
+            Crear Plato
+          </button>
         </div>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filtered.map((dish) => (
-            <li
-              key={dish._id}
-              className="bg-gray-800 text-white p-4 rounded-lg shadow-md"
-            >
-              {dish.image && (
-                <img
-                  src={`${API_URL}/uploads/${dish.image}`}
-                  alt={`Imagen de ${dish.name}`}
-                  className="w-full h-40 object-cover rounded mb-3"
-                />
-              )}
-              <h3 className="text-xl font-semibold">{dish.name}</h3>
-              <p className="text-sm text-gray-300">{dish.description}</p>
-              <p className="text-sm mt-1"><strong>Precio:</strong> ${dish.price}</p>
-              <p className="text-sm text-gray-400 mt-1">
-                <strong className="text-white">Categoría:</strong> {dish.category}
-              </p>
-              {dish.ingredientes && (
-                <p className="text-sm mt-1"><strong>Ingredientes:</strong> {dish.ingredientes}</p>
-              )}
-              {dish.alergenos && (
-                <p className="text-sm mt-1 text-amber-200"><strong>Alérgenos:</strong> {dish.alergenos}</p>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-gray-700/50 border-zinc-600">
+                <TableHead className="text-white">Imagen</TableHead>
+                <TableHead className="text-white">Nombre</TableHead>
+                <TableHead className="text-white">Descripción</TableHead>
+                <TableHead className="text-white">Precio</TableHead>
+                <TableHead className="text-white">Categoría</TableHead>
+                <TableHead className="text-white">Ingredientes</TableHead>
+                <TableHead className="text-white">Alérgenos</TableHead>
+                <TableHead className="text-right text-white">Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map((dish) => (
+                <TableRow key={dish._id} className="hover:bg-gray-700/50 border-zinc-600">
+                  <TableCell>
+                    {dish.image && (
+                      <img
+                        src={`${API_URL}/uploads/${dish.image}`}
+                        alt={`Imagen de ${dish.name}`}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell className="font-medium text-white">{dish.name}</TableCell>
+                  <TableCell className="text-gray-400 max-w-[200px] truncate">{dish.description}</TableCell>
+                  <TableCell className="text-[#D4AF37] font-bold">${dish.price}</TableCell>
+                  <TableCell>
+                    <span className="px-3 py-1 text-sm rounded-full bg-[#B8860B]/20 text-[#D4AF37]">
+                      {dish.category}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-gray-400 max-w-[150px] truncate">
+                    {dish.ingredientes || "No especificado"}
+                  </TableCell>
+                  <TableCell className="text-amber-200 max-w-[150px] truncate">
+                    {dish.alergenos || "No especificado"}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => navigate(`/dishes/edit/${dish._id}`)}
+                        className="p-2 text-gray-400 cursor-pointer hover:text-[#D4AF37] transition-colors"
+                      >
+                        <Pencil className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(dish._id)}
+                        className="p-2 text-gray-400 cursor-pointer hover:text-red-500 transition-colors"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   )

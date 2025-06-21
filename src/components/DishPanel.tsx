@@ -7,9 +7,9 @@ const DishesPanel = () => {
 
   const options = [
     { label: "Listar Platos", path: "/dishes/list" },
-    { label: "Modificar un Plato", path: "/dishes/edit" },
+    // { label: "Modificar un Plato", path: "/dishes/edit" },
     { label: "Crear Nuevo Plato", path: "/dishes/create" },
-    { label: "Eliminar Plato", path: "/dishes/delete" }
+    // { label: "Eliminar Plato", path: "/dishes/delete" }
   ]
 
   return (

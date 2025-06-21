@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
+import { LogoutComponent } from "./LogoutComponent"
+import { BackButton } from "./BackButton"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
@@ -85,104 +94,151 @@ const EditDish = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 flex items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md space-y-4"
-      >
-        <h2 className="text-2xl font-bold mb-4 text-center font-serif">Editar Plato</h2>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
+      <LogoutComponent />
+      <BackButton url="/dishes/list"/>
 
-        <input
-          name="name"
-          value={dish.name}
-          onChange={handleChange}
-          placeholder="Nombre del plato"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-          required
-        />
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+          <h2 className="text-2xl font-bold text-white mb-6">Editar Plato</h2>
 
-        <input
-          name="description"
-          value={dish.description}
-          onChange={handleChange}
-          placeholder="Descripción"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-          required
-        />
+          <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Nombre del plato
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={dish.name}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                required
+              />
+            </div>
 
-        <input
-          name="price"
-          type="number"
-          value={dish.price}
-          onChange={handleChange}
-          placeholder="Precio"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-          required
-        />
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Descripción
+              </label>
+              <input
+                type="text"
+                name="description"
+                value={dish.description}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                required
+              />
+            </div>
 
-        <select
-          name="category"
-          value={dish.category}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-          required
-        >
-          <option value="">Seleccioná categoría</option>
-          <option value="entrada">Entrada</option>
-          <option value="principal">Principal</option>
-          <option value="ensalada">Ensalada</option>
-          <option value="postre">Postre</option>
-          <option value="bebida">Bebida</option>
-          <option value="bebida_alcoholica">Bebida Alcohólica</option>
-        </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Precio
+              </label>
+              <input
+                type="number"
+                name="price"
+                value={dish.price}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                required
+              />
+            </div>
 
-        {dish.category === "principal" && (
-          <select
-            name="subcategory"
-            value={dish.subcategory || ""}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-            required
-          >
-            <option value="">Seleccioná subcategoría</option>
-            <option value="carne">Carne Roja</option>
-            <option value="pasta">Pasta</option>
-            <option value="vegetariano">Carne Blanca</option>
-            <option value="pescado">Pescado</option>
-          </select>
-        )}
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Categoría
+              </label>
+              <Select name="category" value={dish.category} onValueChange={(value) => setDish(prev => ({ ...prev, category: value }))}>
+                <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">
+                  <SelectValue placeholder="Seleccionar categoría" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700">
+                  <SelectItem value="entrada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Entrada</SelectItem>
+                  <SelectItem value="principal" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Principal</SelectItem>
+                  <SelectItem value="ensalada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Ensalada</SelectItem>
+                  <SelectItem value="postre" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Postre</SelectItem>
+                  <SelectItem value="bebida" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida</SelectItem>
+                  <SelectItem value="bebida_alcoholica" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida Alcohólica</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <input
-          name="ingredientes"
-          value={dish.ingredientes}
-          onChange={handleChange}
-          placeholder="Ingredientes"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-        />
+            {dish.category === "principal" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  Subcategoría
+                </label>
+                <Select name="subcategory" value={dish.subcategory || ""} onValueChange={(value) => setDish(prev => ({ ...prev, subcategory: value }))}>
+                  <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">
+                    <SelectValue placeholder="Seleccionar subcategoría" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-700">
+                    <SelectItem value="carne" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Carne Roja</SelectItem>
+                    <SelectItem value="pasta" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Pasta</SelectItem>
+                    <SelectItem value="vegetariano" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Carne Blanca</SelectItem>
+                    <SelectItem value="pescado" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Pescado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
-        <input
-          name="alergenos"
-          value={dish.alergenos}
-          onChange={handleChange}
-          placeholder="Alérgenos"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-        />
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Ingredientes
+              </label>
+              <input
+                type="text"
+                name="ingredientes"
+                value={dish.ingredientes}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+              />
+            </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-yellow-700 file:text-white hover:file:brightness-110"
-        />
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Alérgenos
+              </label>
+              <input
+                type="text"
+                name="alergenos"
+                value={dish.alergenos}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+              />
+            </div>
 
-        <button
-          type="submit"
-          className="w-full bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white font-bold py-2 rounded hover:brightness-110 transition-all"
-        >
-          Guardar Cambios
-        </button>
-      </form>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                Imagen
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#B8860B] file:text-white hover:file:brightness-110"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => navigate("/dishes/list")}
+                className="px-4 py-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+              >
+                Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }

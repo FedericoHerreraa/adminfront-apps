@@ -6,9 +6,7 @@ import DishPanel from "./components/DishPanel"
 import UserPanel from "./components/UserPanel"
 import ProtectedRoute from "./components/ProtectedRoute" 
 import DishesList from "./components/DishesList"
-import DeleteDish from "./components/DeleteDish"
 import CreateDish from "./components/CreateDish"
-import ModifyDish from "./components/ModifyDish"
 import HomeRedirect from "./pages/HomeRedirect"
 import EditDish from "./components/EditDish"
 import { Toaster } from "sonner"
@@ -16,7 +14,6 @@ import { AuthProvider } from "./context/AuthContext"
 import UserList from "./components/UserList"
 import CreateUser from "./components/CreateUser"
 import UpdateUser from "./components/UpdateUser"
-import DeleteUser from "./components/DeleteUser"
 import AuditLog from "./components/AuditLog";
 
 
@@ -57,22 +54,12 @@ function App() {
             <ProtectedRoute>
               <EditDish />
             </ProtectedRoute>
-          } />
-          <Route path="/dishes/delete" element={
-            <ProtectedRoute>
-              <DeleteDish />
-            </ProtectedRoute>
-          } />
+          } />  
           <Route path="/dishes/create" element={
             <ProtectedRoute>
               <CreateDish />
             </ProtectedRoute>
           } />
-          <Route path="/dishes/edit" element={
-              <ProtectedRoute>
-                <ModifyDish />
-              </ProtectedRoute>
-            } />
           <Route
             path="/users"
             element={
@@ -102,14 +89,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <UpdateUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/users/delete"
-            element={
-              <ProtectedRoute>
-                <DeleteUser />
               </ProtectedRoute>
             }
           />
