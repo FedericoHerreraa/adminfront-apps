@@ -5,12 +5,13 @@ import { BackButton } from "./BackButton"
 const UserPanel = () => {
   const navigate = useNavigate()
 
-  const options = [
-    { label: "Listar Usuarios", path: "/users/list" },
-    { label: "Crear Usuario", path: "/users/create" },
-    // { label: "Modificar Usuario", path: "/users/edit" },
-    // { label: "Eliminar Usuario", path: "/users/delete" }
-  ]
+ const options = [
+  { label: "Listar Usuarios", path: "/users/list" },
+  { label: "Crear Usuario", path: "/users/create" },
+  { label: "Ver Auditoría", path: "/auditoria" }, 
+  // { label: "Modificar Usuario", path: "/users/edit" },
+  // { label: "Eliminar Usuario", path: "/users/delete" }
+]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black px-6 pt-6 relative">

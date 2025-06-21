@@ -9,8 +9,12 @@ const CreateDish = () => {
     name: "",
     description: "",
     price: "",
-    category: ""
+    category: "",
+    subcategory: "", // <-- Cambiado aquí
+    ingredientes: "",
+    alergenos: ""
   })
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -18,23 +22,36 @@ const CreateDish = () => {
     setForm(prev => ({ ...prev, [name]: value }))
   }
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImageFile(e.target.files[0])
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
       const token = localStorage.getItem("token")
+      const formData = new FormData()
+
+      formData.append("name", form.name.trim())
+      formData.append("description", form.description.trim())
+      formData.append("price", form.price)
+      formData.append("category", form.category)
+      if (form.category === "principal") {
+        formData.append("subcategory", form.subcategory) // <-- Cambiado aquí
+      }
+      formData.append("ingredientes", form.ingredientes)
+      formData.append("alergenos", form.alergenos)
+      if (imageFile) formData.append("image", imageFile)
+
       const response = await fetch(`${API_URL}/api/dishes`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          name: form.name,
-          description: form.description,
-          price: parseFloat(form.price),
-          category: form.category
-        })
+        body: formData
       })
 
       if (!response.ok) throw new Error("Error al crear el plato")
@@ -51,6 +68,7 @@ const CreateDish = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
+        encType="multipart/form-data"
         className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md space-y-4"
       >
         <h2 className="text-2xl font-bold mb-4 text-center font-serif">Crear Nuevo Plato</h2>
@@ -93,9 +111,50 @@ const CreateDish = () => {
           <option value="">Seleccioná categoría</option>
           <option value="entrada">Entrada</option>
           <option value="principal">Principal</option>
+          <option value="ensalada">Ensalada</option>
           <option value="postre">Postre</option>
           <option value="bebida">Bebida</option>
+          <option value="bebida_alcoholica">Bebida Alcohólica</option>
         </select>
+
+        {form.category === "principal" && (
+          <select
+            name="subcategory" // <-- Cambiado aquí
+            value={form.subcategory} // <-- Cambiado aquí
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
+            required
+          >
+            <option value="">Seleccioná subcategoría</option>
+            <option value="carne">Carne Roja</option>
+            <option value="pasta">Pasta</option>
+            <option value="vegetariano">Carne Blanca</option>
+            <option value="pescado">Pescado</option>
+          </select>
+        )}
+
+        <input
+          name="ingredientes"
+          value={form.ingredientes}
+          onChange={handleChange}
+          placeholder="Ingredientes"
+          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
+        />
+
+        <input
+          name="alergenos"
+          value={form.alergenos}
+          onChange={handleChange}
+          placeholder="Alérgenos"
+          className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
+        />
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-full text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-yellow-700 file:text-white hover:file:brightness-110"
+        />
 
         <button
           type="submit"

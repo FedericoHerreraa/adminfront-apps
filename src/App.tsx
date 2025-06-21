@@ -17,7 +17,7 @@ import UserList from "./components/UserList"
 import CreateUser from "./components/CreateUser"
 import UpdateUser from "./components/UpdateUser"
 import DeleteUser from "./components/DeleteUser"
-
+import AuditLog from "./components/AuditLog";
 
 
 function App() {
@@ -110,6 +110,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <DeleteUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/auditoria"
+            element={
+              <ProtectedRoute>
+                <AuditLog />
               </ProtectedRoute>
             }
           />

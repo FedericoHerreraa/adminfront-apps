@@ -8,6 +8,9 @@ type Dish = {
   description: string
   price: number
   category: string
+  image?: string
+  ingredientes?: string
+  alergenos?: string
 }
 
 import {
@@ -57,15 +60,14 @@ const DishesList = () => {
     }
   }
 
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 relative">
       <LogoutComponent />
-      <BackButton url="/dishes"/>
+      <BackButton url="/dishes" />
 
       <div className="max-w-screen-md mx-auto w-full mt-12 space-y-6">
         <h2 className="text-3xl font-bold text-center font-serif">
-           Platos Disponibles
+          Platos Disponibles
         </h2>
 
         <div className="w-full max-w-xs mx-auto">
@@ -74,10 +76,10 @@ const DishesList = () => {
               <SelectValue placeholder="Todas las categorías" />
             </SelectTrigger>
             <SelectContent className="bg-gray-800 border-gray-700">
-              <SelectItem value="entrada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Entrada</SelectItem>
-              <SelectItem value="principal" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Principal</SelectItem>
-              <SelectItem value="postre" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Postre</SelectItem>
-              <SelectItem value="bebida" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida</SelectItem>
+              <SelectItem value="entrada">Entrada</SelectItem>
+              <SelectItem value="principal">Principal</SelectItem>
+              <SelectItem value="postre">Postre</SelectItem>
+              <SelectItem value="bebida">Bebida</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -88,13 +90,25 @@ const DishesList = () => {
               key={dish._id}
               className="bg-gray-800 text-white p-4 rounded-lg shadow-md"
             >
+              {dish.image && (
+                <img
+                  src={`${API_URL}/uploads/${dish.image}`}
+                  alt={`Imagen de ${dish.name}`}
+                  className="w-full h-40 object-cover rounded mb-3"
+                />
+              )}
               <h3 className="text-xl font-semibold">{dish.name}</h3>
               <p className="text-sm text-gray-300">{dish.description}</p>
-              <p className="text-sm mt-1"> ${dish.price}</p>
+              <p className="text-sm mt-1"><strong>Precio:</strong> ${dish.price}</p>
               <p className="text-sm text-gray-400 mt-1">
-                <span className="font-medium text-white">Categoría:</span>{" "}
-                {dish.category}
+                <strong className="text-white">Categoría:</strong> {dish.category}
               </p>
+              {dish.ingredientes && (
+                <p className="text-sm mt-1"><strong>Ingredientes:</strong> {dish.ingredientes}</p>
+              )}
+              {dish.alergenos && (
+                <p className="text-sm mt-1 text-amber-200"><strong>Alérgenos:</strong> {dish.alergenos}</p>
+              )}
             </li>
           ))}
         </ul>
