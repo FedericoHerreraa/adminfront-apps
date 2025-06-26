@@ -25,7 +25,7 @@ const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    
+
     useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem("token")

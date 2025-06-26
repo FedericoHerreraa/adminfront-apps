@@ -11,6 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { type User } from "@/context/AuthContext"
+import { Loader2 } from "lucide-react"
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
@@ -87,7 +88,7 @@ const UpdateUser = () => {
 
     if (loading) return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6 flex items-center justify-center">
-            <div className="text-white text-xl">Cargando...</div>
+            <Loader2 className="w-10 h-10 animate-spin text-white" />
         </div>
     )
 

@@ -15,15 +15,17 @@ import UserList from "./components/UserList"
 import CreateUser from "./components/CreateUser"
 import UpdateUser from "./components/UpdateUser"
 import AuditLog from "./components/AuditLog";
+import LoadingPage from "./pages/LoadingPage"
 
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Toaster />
         <Routes>
           <Route path="/" element={<HomeRedirect />} />
+          <Route path="/loading" element={<LoadingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
@@ -101,8 +103,8 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
