@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { LogoutComponent } from "./LogoutComponent"
 import { BackButton } from "./BackButton"
-import { Pencil, Trash2 } from "lucide-react"
+import { Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import {
@@ -37,6 +37,8 @@ const DishesList = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
   const [filtered, setFiltered] = useState<Dish[]>([])
   const [category, setCategory] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 8
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const DishesList = () => {
 
   const handleCategoryChange = (value: string) => {
     setCategory(value)
-
+    setCurrentPage(1)
     if (value === "todas") {
       setFiltered(dishes)
     } else {
@@ -97,41 +99,50 @@ const DishesList = () => {
     }
   }
 
+  // PAGINACIÓN
+  const totalPages = Math.ceil(filtered.length / itemsPerPage)
+  const paginatedDishes = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-4 sm:p-6">
       <LogoutComponent />
       <BackButton url="/dishes" />
 
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center gap-8 mb-12">
-          <h1 className="text-4xl font-bold text-white mb-2">Platos</h1>
-          <p className="text-gray-400 text-lg">Administra los platos del restaurante</p>
+        <div className="flex flex-col items-center gap-6 sm:gap-8 mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Platos</h1>
+          <p className="text-gray-400 text-base sm:text-lg text-center">Administra los platos del restaurante</p>
         </div>
 
-        <div className="w-full mb-5 flex justify-between">
+        <div className="w-full mb-5 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center">
           <Select value={category} onValueChange={handleCategoryChange}>
-            <SelectTrigger className="w-full max-w-xs bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
+            <SelectTrigger className="w-full sm:max-w-xs bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
               <SelectValue placeholder="Todas las categorías" />
             </SelectTrigger>
             <SelectContent className="bg-gray-800 border-gray-700">
               <SelectItem value="todas" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Todas las categorías</SelectItem>
               <SelectItem value="entrada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Entrada</SelectItem>
               <SelectItem value="principal" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Principal</SelectItem>
+              <SelectItem value="ensalada" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Ensalada</SelectItem>
               <SelectItem value="postre" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Postre</SelectItem>
               <SelectItem value="bebida" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida</SelectItem>
+              <SelectItem value="bebida_alcoholica" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Bebida Alcohólica</SelectItem>
             </SelectContent>
           </Select>
 
           <button
             onClick={() => navigate("/dishes/create")}
-            className="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+            className="w-full sm:w-auto px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
           >
             Crear Plato
           </button>
         </div>
 
-        <div className="bg-gray-800/50 rounded-xl border border-gray-700">
-          <Table>
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-x-auto">
+          <Table className="min-w-[700px]">
             <TableHeader>
               <TableRow className="hover:bg-gray-700/50 border-zinc-600">
                 <TableHead className="text-white">Imagen</TableHead>
@@ -145,7 +156,7 @@ const DishesList = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((dish) => (
+              {paginatedDishes.map((dish) => (
                 <TableRow key={dish._id} className="hover:bg-gray-700/50 border-zinc-600">
                   <TableCell>
                     {dish.image && (
@@ -190,6 +201,35 @@ const DishesList = () => {
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        {/* PAGINACIÓN */}
+        <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <span className="text-gray-400 text-sm text-center">
+            Mostrando{" "}
+            <strong className="text-white">{filtered.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}</strong> -{" "}
+            <strong className="text-white">{Math.min(currentPage * itemsPerPage, filtered.length)}</strong> de{" "}
+            <strong className="text-white">{filtered.length}</strong> platos
+          </span>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 transition-opacity flex items-center justify-center"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="hidden sm:inline ml-1">Anterior</span>
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className="px-3 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 transition-opacity flex items-center justify-center"
+            >
+              <span className="hidden sm:inline mr-1">Siguiente</span>
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
