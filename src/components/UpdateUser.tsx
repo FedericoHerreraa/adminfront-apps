@@ -149,13 +149,13 @@ const UpdateUser = () => {
                             <button
                                 type="button"
                                 onClick={() => navigate("/users/list")}
-                                className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                                className="px-4 py-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
                             >
                                 Cancelar
                             </button>
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+                                className="px-4 py-2 bg-gradient-to-r cursor-pointer from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
                             >
                                 Guardar Cambios
                             </button>
