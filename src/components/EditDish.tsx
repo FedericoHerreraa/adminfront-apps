@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
 type Dish = {
   _id?: string

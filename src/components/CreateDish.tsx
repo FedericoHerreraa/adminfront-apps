@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
 const CreateDish = () => {
   const [form, setForm] = useState({
@@ -19,7 +19,7 @@ const CreateDish = () => {
     description: "",
     price: "",
     category: "",
-    subcategory: "", 
+    subcategory: "",
     ingredientes: "",
     alergenos: ""
   })
@@ -42,18 +42,49 @@ const CreateDish = () => {
 
     try {
       const token = localStorage.getItem("token")
+      if (!token) {
+        toast.error("No hay token de autenticación")
+        return
+      }
+
       const formData = new FormData()
+
+      // Validar campos requeridos
+      if (!form.name.trim() || !form.description.trim() || !form.price || !form.category) {
+        toast.error("Por favor completa todos los campos requeridos")
+        return
+      }
 
       formData.append("name", form.name.trim())
       formData.append("description", form.description.trim())
       formData.append("price", form.price)
       formData.append("category", form.category)
+      
       if (form.category === "principal") {
-        formData.append("subcategory", form.subcategory) 
+        if (!form.subcategory) {
+          toast.error("Por favor selecciona una subcategoría")
+          return
+        }
+        formData.append("subcategory", form.subcategory)
       }
-      formData.append("ingredientes", form.ingredientes)
-      formData.append("alergenos", form.alergenos)
-      if (imageFile) formData.append("image", imageFile)
+      
+      formData.append("ingredientes", form.ingredientes || "")
+      formData.append("alergenos", form.alergenos || "")
+      
+      if (imageFile) {
+        formData.append("image", imageFile)
+      }
+
+      console.log("Enviando datos:", {
+        name: form.name,
+        description: form.description,
+        price: form.price,
+        category: form.category,
+        subcategory: form.subcategory,
+        ingredientes: form.ingredientes,
+        alergenos: form.alergenos,
+        hasImage: !!imageFile
+      })
 
       const response = await fetch(`${API_URL}/api/dishes`, {
         method: "POST",
@@ -63,20 +94,25 @@ const CreateDish = () => {
         body: formData
       })
 
-      if (!response.ok) throw new Error("Error al crear el plato")
+      const responseData = await response.text()
+      console.log("Respuesta del servidor:", response.status, responseData)
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${responseData}`)
+      }
 
       toast.success("Plato creado con éxito!")
       navigate("/dishes/list")
     } catch (error) {
       console.error("Error al crear plato:", error)
-      toast.error("Hubo un error al crear el plato")
+      toast.error(error instanceof Error ? error.message : "Hubo un error al crear el plato")
     }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
       <LogoutComponent />
-      <BackButton url="/dishes/list"/>
+      <BackButton url="/dishes/list" />
 
       <div className="max-w-2xl mx-auto">
         <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
@@ -85,7 +121,7 @@ const CreateDish = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">
-                Nombre del plato
+                Nombre del plato *
               </label>
               <input
                 type="text"
@@ -99,7 +135,7 @@ const CreateDish = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">
-                Descripción
+                Descripción *
               </label>
               <input
                 type="text"
@@ -113,7 +149,7 @@ const CreateDish = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">
-                Precio
+                Precio *
               </label>
               <input
                 type="number"
@@ -127,7 +163,7 @@ const CreateDish = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">
-                Categoría
+                Categoría *
               </label>
               <Select name="category" value={form.category} onValueChange={(value) => setForm(prev => ({ ...prev, category: value }))}>
                 <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">
@@ -147,7 +183,7 @@ const CreateDish = () => {
             {form.category === "principal" && (
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">
-                  Subcategoría
+                  Subcategoría *
                 </label>
                 <Select name="subcategory" value={form.subcategory} onValueChange={(value) => setForm(prev => ({ ...prev, subcategory: value }))}>
                   <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">

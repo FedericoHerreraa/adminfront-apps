@@ -99,7 +99,6 @@ const DishesList = () => {
     }
   }
 
-  // PAGINACIÓN
   const totalPages = Math.ceil(filtered.length / itemsPerPage)
   const paginatedDishes = filtered.slice(
     (currentPage - 1) * itemsPerPage,
