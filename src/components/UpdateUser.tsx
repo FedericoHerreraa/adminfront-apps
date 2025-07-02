@@ -15,16 +15,18 @@ import { Loader2 } from "lucide-react"
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
+// ...imports igual que antes
 
 const UpdateUser = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const [user, setUser] = useState<User>({
+    const [user, setUser] = useState<User & { password?: string }>({
         _id: "",
         name: "",
         email: "",
-        role: ""
+        role: "",
+        password: ""
     })
 
     const [loading, setLoading] = useState(true)
@@ -43,7 +45,7 @@ const UpdateUser = () => {
                 if (!response.ok) throw new Error("Error al obtener el usuario")
 
                 const data = await response.json()
-                setUser(data)
+                setUser({ ...data, password: "" })
                 setLoading(false)
             } catch (err) {
                 console.error("Error al obtener el usuario", err)
@@ -67,13 +69,20 @@ const UpdateUser = () => {
         e.preventDefault()
         try {
             const token = localStorage.getItem("token")
+            const userToSend = { ...user }
+
+            // No enviar password si está vacío
+            if (!user.password?.trim()) {
+                delete userToSend.password
+            }
+
             const response = await fetch(`${API_URL}/api/users/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(userToSend)
             })
 
             if (!response.ok) throw new Error("Error al actualizar el usuario")
@@ -93,74 +102,88 @@ const UpdateUser = () => {
     )
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
-            <LogoutComponent />
-            <BackButton url="/users/list"/>
+        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-2">
+                <LogoutComponent />
+                <BackButton url="/users/list" />
+            </div>
 
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
-                    <h2 className="text-2xl font-bold text-white mb-6">Editar Usuario</h2>
+            <div className="flex flex-1 items-center justify-center mt-8">
+                <div className="w-full max-w-2xl">
+                    <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+                        <h2 className="text-2xl font-bold text-white mb-6 text-center">Editar Usuario</h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-1">
-                                Nombre
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={user.name}
-                                onChange={handleChange}
-                                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
-                                required
-                            />
-                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">Nombre</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={user.name}
+                                    onChange={handleChange}
+                                    className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                                    required
+                                />
+                            </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-1">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={user.email}
-                                onChange={handleChange}
-                                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
-                                required
-                            />
-                        </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={user.email}
+                                    onChange={handleChange}
+                                    className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                                    required
+                                />
+                            </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-1">
-                                Rol
-                            </label>
-                            <Select name="role" value={user.role} onValueChange={(value) => setUser(prev => ({ ...prev, role: value }))}>
-                                <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">
-                                    <SelectValue placeholder="Seleccionar rol" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-gray-800 border-gray-700">
-                                    <SelectItem value="user" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Usuario</SelectItem>
-                                    <SelectItem value="admin" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Administrador</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">Rol</label>
+                                <Select
+                                    name="role"
+                                    value={user.role}
+                                    onValueChange={(value) => setUser(prev => ({ ...prev, role: value }))}
+                                >
+                                    <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors">
+                                        <SelectValue placeholder="Seleccionar rol" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-gray-800 border-gray-700">
+                                        <SelectItem value="user" className="text-white hover:bg-gray-700/80">Usuario</SelectItem>
+                                        <SelectItem value="admin" className="text-white hover:bg-gray-700/80">Administrador</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button
-                                type="button"
-                                onClick={() => navigate("/users/list")}
-                                className="px-4 py-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                type="submit"
-                                className="px-4 py-2 bg-gradient-to-r cursor-pointer from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
-                            >
-                                Guardar Cambios
-                            </button>
-                        </div>
-                    </form>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">Contraseña (opcional)</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={user.password}
+                                    onChange={handleChange}
+                                    placeholder="Dejar en blanco para mantener la actual"
+                                    className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-500 focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none transition-colors"
+                                />
+                            </div>
+
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => navigate("/users/list")}
+                                    className="px-4 py-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-gradient-to-r cursor-pointer from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+                                >
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

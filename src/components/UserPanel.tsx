@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { LogoutComponent } from "./LogoutComponent"
 import { BackButton } from "./BackButton"
 
+
 const UserPanel = () => {
   const navigate = useNavigate()
 
@@ -9,6 +10,9 @@ const UserPanel = () => {
   { label: "Listar Usuarios", path: "/users/list" },
   { label: "Crear Usuario", path: "/users/create" },
   { label: "Ver Auditoría", path: "/auditoria" }, 
+  
+
+  
 ]
 
   return (

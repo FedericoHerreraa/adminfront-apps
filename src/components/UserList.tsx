@@ -78,39 +78,46 @@ export default function UserList() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
-            <LogoutComponent />
-            <BackButton url="/users"/>
+        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-4 sm:p-6">
+           
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                    <LogoutComponent />
+                    <BackButton url="/users" />
+                </div>
+            </div>
 
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col items-center gap-8 mb-12">
-                    <h1 className="text-4xl font-bold text-white mb-2">Usuarios</h1>
-                    <p className="text-gray-400 text-lg">Administra los usuarios del sistema</p>
-
+               
+                <div className="flex flex-col items-center gap-4 mt-10 mb-12">
+                    <h1 className="text-4xl font-bold text-white mb-2 text-center">Usuarios</h1>
+                    <p className="text-gray-400 text-lg text-center">Administra los usuarios del sistema</p>
                 </div>
 
-                <div className="w-full mb-5 flex justify-between">
-                    <Select value={role} onValueChange={handleRoleChange}>
-                        <SelectTrigger className="w-full max-w-xs bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
-                            <SelectValue placeholder="Todos los roles" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-gray-700">
-                            <SelectItem value="todos" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Todos los roles</SelectItem>
-                            <SelectItem value="admin" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Administrador</SelectItem>
-                            <SelectItem value="user" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Usuario</SelectItem>
-                        </SelectContent>
-                    </Select>
-
+             
+                <div className="w-full mb-5 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center">
+                    <div className="w-full sm:w-auto flex-1">
+                        <Select value={role} onValueChange={handleRoleChange}>
+                            <SelectTrigger className="w-full bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
+                                <SelectValue placeholder="Todos los roles" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-gray-800 border-gray-700">
+                                <SelectItem value="todos" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Todos los roles</SelectItem>
+                                <SelectItem value="admin" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Administrador</SelectItem>
+                                <SelectItem value="user" className="text-white hover:text-white hover:bg-gray-700/80 focus:bg-gray-700/80">Usuario</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <button
                         onClick={() => navigate("/users/create")}
-                        className="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
+                        className="w-full sm:w-auto px-4 py-2 cursor-pointer bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110 transition-all"
                     >
                         Crear Usuario
                     </button>
                 </div>
 
-                <div className="bg-gray-800/50 rounded-xl border border-gray-700">
-                    <Table>
+                <div className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-x-auto">
+                    <Table className="min-w-[350px] sm:min-w-[700px]">
                         <TableHeader>
                             <TableRow className="hover:bg-gray-700/50 border-zinc-600">
                                 <TableHead className="text-white">Nombre</TableHead>
@@ -122,8 +129,8 @@ export default function UserList() {
                         <TableBody>
                             {filtered.map((user) => (
                                 <TableRow key={user._id} className="hover:bg-gray-700/50 border-zinc-600">
-                                    <TableCell className="font-medium text-white">{user.name}</TableCell>
-                                    <TableCell className="text-gray-400">{user.email}</TableCell>
+                                    <TableCell className="font-medium text-white break-words max-w-[150px]">{user.name}</TableCell>
+                                    <TableCell className="text-gray-400 break-words max-w-[200px]">{user.email}</TableCell>
                                     <TableCell>
                                         <span className={`px-3 py-1 text-sm rounded-full ${user.role === "admin" ? "bg-[#1E3A8A] text-[#bfbfbf]" : "bg-[#D4AF37]/20 text-[#B8860B]"} `}>
                                             {user.role}

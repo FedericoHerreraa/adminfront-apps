@@ -26,34 +26,55 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const token = localStorage.getItem("token")
-            if (token) {
-                const response = await fetch(`${API_URL}/api/users/profile`, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                })
-
-                const data = await response.json()
-                console.log(data)
-                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
-            }
-        }
-        checkAuth()
-    }, [])
+    const logout = () => {
+        localStorage.removeItem("token")
+        setUser(null)
+        window.location.href = "/login"
+    }
 
     const fetchUsers = async () => {
         const token = localStorage.getItem("token")
         const response = await fetch(`${API_URL}/api/users`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         })
+
+        if (response.status === 401 || response.status === 404) {
+            logout()
+            return []
+        }
+
         const data = await response.json()
         return data
     }
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = localStorage.getItem("token")
+            if (!token) return
+
+            try {
+                const response = await fetch(`${API_URL}/api/users/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                if (response.status === 401 || response.status === 404) {
+                    logout()
+                    return
+                }
+
+                const data = await response.json()
+                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
+            } catch {
+                logout()
+            }
+        }
+
+        checkAuth()
+    }, [])
 
     const login = async (formData: { email: string, password: string }) => {
         setIsLoading(true)
@@ -75,13 +96,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             localStorage.setItem("token", data.token)
 
-            if (data) {
-                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
-                console.log(user)
-            }
+            setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
 
-            toast.success("Inicio de sesión exitoso")
-
+            toast.success("Inicio de sesión exitoso 🎉")
         } catch (err: unknown) {
             if (err instanceof Error) {
                 toast.error(err.message || "Error desconocido")
@@ -92,11 +109,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } finally {
             setIsLoading(false)
         }
-    }
-
-    const logout = () => {
-        localStorage.removeItem("token")
-        setUser(null)
     }
 
     const register = async (formData: { email: string, name: string, password: string }) => {
@@ -129,7 +141,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    return <AuthContext.Provider value={{ user, setUser, login, logout, register, isLoading, fetchUsers }}>{children}</AuthContext.Provider>
+    return (
+        <AuthContext.Provider value={{ user, setUser, login, logout, register, isLoading, fetchUsers }}>
+            {children}
+        </AuthContext.Provider>
+    )
 }
 
 export const useAuth = () => {

@@ -111,95 +111,98 @@ const EditDish = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
-      <LogoutComponent />
-      <BackButton url="/dishes/list"/>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6 flex flex-col">
+      <div className="flex items-center justify-between mb-2">
+        <LogoutComponent />
+        <BackButton url="/dishes/list"/>
+      </div>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-6">Editar Plato</h2>
+      <div className="flex flex-1 items-center justify-center mt-8">
+        <div className="w-full max-w-2xl">
+          <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">Editar Plato</h2>
 
-          <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
-            {/* inputs: nombre, descripcion, precio, categoría */}
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Nombre del plato</label>
-              <input type="text" name="name" value={dish.name} onChange={handleChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Descripción</label>
-              <input type="text" name="description" value={dish.description} onChange={handleChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Precio</label>
-              <input type="number" name="price" value={dish.price} onChange={handleChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Categoría</label>
-              <Select name="category" value={dish.category} onValueChange={(value) => setDish(prev => ({ ...prev, category: value }))}>
-                <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
-                  <SelectValue placeholder="Seleccionar categoría" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-800 border-gray-700">
-                  <SelectItem value="entrada">Entrada</SelectItem>
-                  <SelectItem value="principal">Principal</SelectItem>
-                  <SelectItem value="ensalada">Ensalada</SelectItem>
-                  <SelectItem value="postre">Postre</SelectItem>
-                  <SelectItem value="bebida">Bebida</SelectItem>
-                  <SelectItem value="bebida_alcoholica">Bebida Alcohólica</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {dish.category === "principal" && (
+            <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Subcategoría</label>
-                <Select name="subcategory" value={dish.subcategory || ""} onValueChange={(value) => setDish(prev => ({ ...prev, subcategory: value }))}>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Nombre del plato</label>
+                <input type="text" name="name" value={dish.name} onChange={handleChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Descripción</label>
+                <input type="text" name="description" value={dish.description} onChange={handleChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Precio</label>
+                <input type="number" name="price" value={dish.price} onChange={handleChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" required />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Categoría</label>
+                <Select name="category" value={dish.category} onValueChange={(value) => setDish(prev => ({ ...prev, category: value }))}>
                   <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
-                    <SelectValue placeholder="Seleccionar subcategoría" />
+                    <SelectValue placeholder="Seleccionar categoría" />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700">
-                    <SelectItem value="carne">Carne Roja</SelectItem>
-                    <SelectItem value="pasta">Pasta</SelectItem>
-                    <SelectItem value="vegetariano">Carne Blanca</SelectItem>
-                    <SelectItem value="pescado">Pescado</SelectItem>
+                    <SelectItem value="entrada">Entrada</SelectItem>
+                    <SelectItem value="principal">Principal</SelectItem>
+                    <SelectItem value="ensalada">Ensalada</SelectItem>
+                    <SelectItem value="postre">Postre</SelectItem>
+                    <SelectItem value="bebida">Bebida</SelectItem>
+                    <SelectItem value="bebida_alcoholica">Bebida Alcohólica</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Ingredientes</label>
-              <input type="text" name="ingredientes" value={dish.ingredientes} onChange={handleChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" />
-            </div>
+              {dish.category === "principal" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Subcategoría</label>
+                  <Select name="subcategory" value={dish.subcategory || ""} onValueChange={(value) => setDish(prev => ({ ...prev, subcategory: value }))}>
+                    <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
+                      <SelectValue placeholder="Seleccionar subcategoría" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-800 border-gray-700">
+                      <SelectItem value="carne">Carne Roja</SelectItem>
+                      <SelectItem value="pasta">Pasta</SelectItem>
+                      <SelectItem value="vegetariano">Carne Blanca</SelectItem>
+                      <SelectItem value="pescado">Pescado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Alérgenos</label>
-              <input type="text" name="alergenos" value={dish.alergenos} onChange={handleChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Ingredientes</label>
+                <input type="text" name="ingredientes" value={dish.ingredientes} onChange={handleChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Imagen</label>
-              <input type="file" accept="image/*" onChange={handleImageChange}
-                className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white file:bg-[#B8860B] file:text-white" />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Alérgenos</label>
+                <input type="text" name="alergenos" value={dish.alergenos} onChange={handleChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white" />
+              </div>
 
-            <div className="flex justify-end gap-3 mt-6">
-              <button type="button" onClick={() => navigate("/dishes/list")}
-                className="px-4 py-2 text-gray-400 hover:text-white">Cancelar</button>
-              <button type="submit"
-                className="px-4 py-2 bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110">
-                Guardar Cambios
-              </button>
-            </div>
-          </form>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Imagen</label>
+                <input type="file" accept="image/*" onChange={handleImageChange}
+                  className="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white file:bg-[#B8860B] file:text-white" />
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6">
+                <button type="button" onClick={() => navigate("/dishes/list")}
+                  className="px-4 py-2 text-gray-400 hover:text-white">Cancelar</button>
+                <button type="submit"
+                  className="px-4 py-2 bg-gradient-to-r from-[#B8860B] to-[#A87408] text-white rounded-lg hover:brightness-110">
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

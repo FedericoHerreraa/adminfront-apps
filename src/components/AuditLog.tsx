@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000"
 
@@ -21,6 +22,8 @@ type AuditLogEntry = {
 
 function AuditLog() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -36,36 +39,49 @@ function AuditLog() {
       })
       .then((data) => setLogs(data))
       .catch((err) => {
-        console.error('❌ Error al traer logs:', err.message);
+        console.error(' Error al traer logs:', err.message);
       });
   }, [token]);
 
-const renderDetails = (details: Record<string, unknown> | string) => {
-  if (typeof details === 'string') return details;
+  const renderDetails = (details: Record<string, unknown> | string) => {
+    if (typeof details === 'string') return details;
 
-  const camposPermitidos = [
-    'name', 'email', 'createdBy', 'updatedBy', 'deletedBy',
-    'dishId', 'updatedUserId', 'createdUserId', 'deletedUserId'
-  ];
+    const camposPermitidos = [
+      'name', 'email', 'createdBy', 'updatedBy', 'deletedBy',
+      'dishId', 'updatedUserId', 'createdUserId', 'deletedUserId'
+    ];
 
-  return Object.entries(details)
-    .filter(([key]) => camposPermitidos.includes(key))
-    .map(([key, value]) => `${key}: ${String(value)}`)
-    .join(' | ');
-};
+    return Object.entries(details)
+      .filter(([key]) => camposPermitidos.includes(key))
+      .map(([key, value]) => `${key}: ${String(value)}`)
+      .join(' | ');
+  };
+
+  const sortedLogs = logs.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const totalPages = Math.ceil(sortedLogs.length / itemsPerPage);
+  const paginatedLogs = sortedLogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-6">
-      <BackButton url='/users'/>
-      
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center gap-8 mb-12">
-          <h1 className="text-4xl font-bold text-white mb-2">Registro de Auditoría</h1>
-          <p className="text-gray-400 text-lg">Historial de acciones realizadas en el sistema</p>
+        {/* Botón volver arriba a la izquierda */}
+        <div className="flex items-center">
+          <div>
+            <BackButton url='/users'/>
+          </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-xl border border-gray-700">
-          <Table>
+        {/* Título y subtítulo centrados y con margen superior */}
+        <div className="flex flex-col items-center gap-4 mt-14 mb-10">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white text-center">Registro de Auditoría</h1>
+          <p className="text-gray-400 text-base sm:text-lg text-center">Historial de acciones realizadas en el sistema</p>
+        </div>
+
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-x-auto">
+          <Table className="min-w-[700px]">
             <TableHeader>
               <TableRow className="hover:bg-gray-700/50 border-zinc-600">
                 <TableHead className="text-white">Fecha</TableHead>
@@ -75,7 +91,7 @@ const renderDetails = (details: Record<string, unknown> | string) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {logs.map((log) => (
+              {paginatedLogs.map((log) => (
                 <TableRow key={log._id} className="hover:bg-gray-700/50 border-zinc-600">
                   <TableCell className="text-white text-left">
                     {new Date(log.date).toLocaleString()}
@@ -103,6 +119,32 @@ const renderDetails = (details: Record<string, unknown> | string) => {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* PAGINACIÓN */}
+        <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <span className="text-gray-400 text-sm text-center">
+            Mostrando{" "}
+            <strong className="text-white">{logs.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}</strong> -{" "}
+            <strong className="text-white">{Math.min(currentPage * itemsPerPage, logs.length)}</strong> de{" "}
+            <strong className="text-white">{logs.length}</strong> registros
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 transition-opacity flex items-center justify-center"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className="px-3 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 transition-opacity flex items-center justify-center"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
