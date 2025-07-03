@@ -147,7 +147,7 @@ const EditDish = () => {
                   <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Seleccionar categoría" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
+                  <SelectContent className="bg-gray-800 border-gray-700 text-white">
                     <SelectItem value="entrada">Entrada</SelectItem>
                     <SelectItem value="principal">Principal</SelectItem>
                     <SelectItem value="ensalada">Ensalada</SelectItem>
@@ -165,7 +165,7 @@ const EditDish = () => {
                     <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
                       <SelectValue placeholder="Seleccionar subcategoría" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-700">
+                    <SelectContent className="bg-gray-800 border-gray-700 text-white">
                       <SelectItem value="carne">Carne Roja</SelectItem>
                       <SelectItem value="pasta">Pasta</SelectItem>
                       <SelectItem value="vegetariano">Carne Blanca</SelectItem>

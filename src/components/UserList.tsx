@@ -96,7 +96,7 @@ export default function UserList() {
 
              
                 <div className="w-full mb-5 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center">
-                    <div className="w-full sm:w-auto flex-1">
+                    <div className="w-full sm:w-auto">
                         <Select value={role} onValueChange={handleRoleChange}>
                             <SelectTrigger className="w-full bg-gray-800/50 text-white border-gray-700 hover:border-[#B8860B] transition-colors">
                                 <SelectValue placeholder="Todos los roles" />
