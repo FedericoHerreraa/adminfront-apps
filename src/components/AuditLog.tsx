@@ -45,6 +45,7 @@ function AuditLog() {
 
   const renderDetails = (details: Record<string, unknown> | string) => {
     if (typeof details === 'string') return details;
+    if (!details || typeof details !== 'object') return 'N/A';
 
     const camposPermitidos = [
       'name', 'email', 'createdBy', 'updatedBy', 'deletedBy',
