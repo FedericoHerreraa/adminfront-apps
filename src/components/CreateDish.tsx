@@ -55,6 +55,12 @@ const CreateDish = () => {
         return
       }
 
+      // Validar que el precio no sea negativo
+      if (parseFloat(form.price) < 0) {
+        toast.error("El precio no puede ser negativo")
+        return
+      }
+
       formData.append("name", form.name.trim())
       formData.append("description", form.description.trim())
       formData.append("price", form.price)
