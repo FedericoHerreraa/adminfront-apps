@@ -28,7 +28,7 @@ export default function UserList() {
     const [users, setUsers] = useState<User[]>([])
     const [filtered, setFiltered] = useState<User[]>([])
     const [role, setRole] = useState("")
-    const { fetchUsers } = useAuth()
+    const { fetchUsers, user } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -70,6 +70,14 @@ export default function UserList() {
 
             setUsers(prev => prev.filter(u => u._id !== id))
             setFiltered(prev => prev.filter(u => u._id !== id))
+
+        
+            if (user?._id === id) {
+                console.log("Eliminando usuario actual")
+                localStorage.removeItem("token")
+                navigate("/login")
+            }
+
             toast.success("Usuario eliminado correctamente")
         } catch (err) {
             console.error(err)

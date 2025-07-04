@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 }
 
                 const data = await response.json()
-                setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
+                setUser({ _id: data.id, role: data.role, name: data.name, email: data.email })
             } catch {
                 logout()
             }
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             localStorage.setItem("token", data.token)
 
-            setUser({ _id: data._id, role: data.role, name: data.name, email: data.email })
+            setUser({ _id: data.id, role: data.role, name: data.name, email: data.email })
 
             toast.success("Inicio de sesión exitoso 🎉")
         } catch (err: unknown) {
