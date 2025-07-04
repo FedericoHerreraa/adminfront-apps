@@ -70,26 +70,7 @@ adminfront-apps/
 
 - El backend debe estar corriendo y accesible desde la URL configurada en `VITE_REACT_APP_API_URL`.
 - Para producción (por ejemplo, en Vercel), configura la variable de entorno en el dashboard del proveedor.
-```
 
----
-
-## 6. Estructura del sistema
-
-```
-adminfront-apps/
-├── src/
-│   ├── components/         # Componentes React
-│   ├── context/            # Contextos globales (Auth, etc.)
-│   ├── lib/                # Utilidades
-│   ├── pages/              # Páginas principales
-│   ├── index.css           # Estilos globales
-│   └── App.tsx             # Componente principal
-├── public/                 # Archivos estáticos
-├── .env                    # Variables de entorno frontend
-├── package.json
-└── README.md
-```
 
 El backend debe tener una estructura similar a:
 ```
