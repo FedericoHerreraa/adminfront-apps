@@ -66,6 +66,11 @@ const EditDish = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      if (parseFloat(dish.price) < 0) {
+        toast.error("El precio no puede ser negativo")
+        return
+      }
+
       const token = localStorage.getItem("token")
       let body: BodyInit
       const headers: HeadersInit = { Authorization: `Bearer ${token}` }
